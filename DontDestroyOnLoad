@@ -1,0 +1,33 @@
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace MoreMountains.Tools
+{
+    /// <summary>
+    /// Add this component to an object and it'll persist across scenes 
+    /// </summary>
+    public class DontDestroyOnLoad : MonoBehaviour
+    {
+        /// <summary>
+        /// On Awake we make sure our object will not destroy on the next scene load
+        /// </summary>
+        protected void Awake()
+        
+        {
+            //We need to check if the object is already in the scene. if so destroy on awake.
+            for (int i = 0; i < Object.FindObjectsOfType<DontDestroyOnLoad>().Length; i++)
+            {
+                if(Object.FindObjectsOfType<DontDestroyOnLoad>()[i] != this)
+                {
+                    if (Object.FindObjectsOfType<DontDestroyOnLoad>()[i].name == gameObject.name)
+                    {
+                        Destroy(gameObject);
+                    }
+                }
+            }
+            DontDestroyOnLoad(gameObject);
+        }
+    }   
+}
