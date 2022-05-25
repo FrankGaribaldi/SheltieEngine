@@ -47,6 +47,11 @@ public class CountToPlayFeedback : MonoBehaviour
           }
         }
     }
+    
+    public void CountDown()
+    {
+        currentNumber--;
+    }
 
 
     // This Resets the counter to 0
