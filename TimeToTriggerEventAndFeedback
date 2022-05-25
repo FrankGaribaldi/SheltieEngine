@@ -1,0 +1,89 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Feedbacks;
+using UnityEngine.Events;
+
+
+namespace MoreMountains.Tools
+{
+
+    public class TimeToTriggerEventAndFeedback : MonoBehaviour
+    {
+        public float TargetTime = 3;
+        private float currentTime = 0;
+
+        private bool Activatable = true;
+        public bool OnlyActivateOnce;
+
+        public MMFeedbacks OnTrigger2DStayFeedback;
+
+        public UnityEvent OnTrigger2DStayEvent;
+        public LayerMask Trigger2DLayerMask;
+
+
+        // Start is called before the first frame update
+        // At start we reset the Timer to 0
+        void Start()
+        {
+            ResetTimer();
+        }
+
+        // We check if the trigger collider is on the right layer and if it is able to be activated
+        protected virtual void OnTriggerStay2D(Collider2D other)
+        {
+            if (Trigger2DLayerMask.MMContains(other.gameObject) && Activatable == true)                
+                    {
+                        currentTime = currentTime + Time.deltaTime;
+                        if (currentTime >= TargetTime)
+                        {
+                            TriggerSuccess();
+                        if (OnlyActivateOnce == true)
+                            {
+                                UseActivation();
+                            }
+                        }
+                    }               
+                else
+                {
+                    return;
+                }          
+        }
+
+        // On Exit we reset the timer
+        protected virtual void OnTriggerExit2D(Collider2D other)
+        {
+            if (Trigger2DLayerMask.MMContains(other.gameObject))
+            {
+                ResetTimer();
+            }
+       
+        }
+
+        // Triggers the Event & Feedback, restarts the timer
+        public void TriggerSuccess()
+        {
+            OnTrigger2DStayEvent.Invoke();
+            OnTrigger2DStayFeedback?.PlayFeedbacks();
+            ResetTimer();
+            return;
+        }
+
+        //Restarts the Timer
+        public void ResetTimer()
+        {
+            currentTime = 0;
+        }
+
+        //Sets the trigger to no longer be activatable
+        public void UseActivation()
+        {
+
+            {
+                Activatable = false;
+            }
+
+        }
+    }
+}
+
