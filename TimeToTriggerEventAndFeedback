@@ -11,9 +11,9 @@ namespace MoreMountains.Tools
     public class TimeToTriggerEventAndFeedback : MonoBehaviour
     {
         public float TargetTime = 3;
-        private float currentTime = 0;
+        private float _currentTime = 0;
 
-        private bool Activatable = true;
+        private bool _activatable = true;
         public bool OnlyActivateOnce;
 
         public MMFeedbacks OnTrigger2DStayFeedback;
@@ -32,10 +32,10 @@ namespace MoreMountains.Tools
         // We check if the trigger collider is on the right layer and if it is able to be activated
         protected virtual void OnTriggerStay2D(Collider2D other)
         {
-            if (Trigger2DLayerMask.MMContains(other.gameObject) && Activatable == true)                
+            if (Trigger2DLayerMask.MMContains(other.gameObject) && _activatable == true)                
                     {
-                        currentTime = currentTime + Time.deltaTime;
-                        if (currentTime >= TargetTime)
+                        _currentTime = _currentTime + Time.deltaTime;
+                        if (_currentTime >= TargetTime)
                         {
                             TriggerSuccess();
                         if (OnlyActivateOnce == true)
@@ -72,7 +72,7 @@ namespace MoreMountains.Tools
         //Restarts the Timer
         public void ResetTimer()
         {
-            currentTime = 0;
+            _currentTime = 0;
         }
 
         //Sets the trigger to no longer be activatable
@@ -80,10 +80,9 @@ namespace MoreMountains.Tools
         {
 
             {
-                Activatable = false;
+                _activatable = false;
             }
 
         }
     }
 }
-
