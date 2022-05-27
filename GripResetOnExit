@@ -1,0 +1,20 @@
+using UnityEngine;
+using System.Collections;
+using MoreMountains.Tools;
+
+namespace MoreMountains.CorgiEngine
+{
+//This class extends the Grip class and add a reset to the grip on exit of the character
+public class GripResetOnExit : Grip
+    {
+            protected virtual void OnTriggerExit2D(Collider2D other)
+        {
+            CharacterGrip characterGrip = other.gameObject.MMGetComponentNoAlloc<Character>()?.FindAbility<CharacterGrip>();
+
+                if (_mmPathMovement != null)
+                {
+                    _mmPathMovement.ResetPath();
+                }
+        }
+    }
+}
