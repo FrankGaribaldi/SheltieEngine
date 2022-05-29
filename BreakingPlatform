@@ -1,0 +1,104 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Feedbacks;
+using UnityEngine.Events;
+
+
+namespace MoreMountains.Tools
+{
+public class BreakingPlatform : MonoBehaviour
+    {
+
+        public bool _regenerating = false;
+
+        public float RegenTime = 3f;
+        private float _currentRegenTime = 0f;
+
+        public float TriggerTime = 2f;
+        private float _currentTriggerTime = 0f;
+
+        public LayerMask Trigger2DLayerMask;
+        public GameObject BoxColl;
+
+        public Animator anim;
+
+
+        // Start is called before the first frame update
+        void Start()
+        {
+            _currentTriggerTime = 0f;  
+        }
+
+        void Update()
+        {
+            if(_regenerating == true)
+            {        
+                Regenerate();        
+            }
+        }
+        protected virtual void OnTriggerEnter2D(Collider2D other)
+        {
+            if (Trigger2DLayerMask.MMContains(other.gameObject))
+            {
+                anim.SetBool("Rumbling", true);
+
+            }
+        }
+
+        protected virtual void OnTriggerStay2D(Collider2D other)
+        {
+            if (Trigger2DLayerMask.MMContains(other.gameObject))
+            {
+                if (_currentTriggerTime < TriggerTime)
+                {
+                    _currentTriggerTime = _currentTriggerTime + Time.deltaTime;
+                }                
+                else
+                {
+                    BridgeBreak();
+                    anim.SetBool("Breaking", true);                        
+                }  
+            }
+        }
+
+        protected virtual void OnTriggerExit2D(Collider2D other)
+        {
+            if (Trigger2DLayerMask.MMContains(other.gameObject))
+            {
+                _regenerating = true;
+                _currentTriggerTime = 0f; 
+                anim.SetBool("Rumbling", false);               
+            }
+        }
+        
+        public void BridgeBreak()
+        {
+            //PlatformBox.enabled = false;
+            _currentRegenTime = 0f;
+            BoxColl.SetActive(false);  
+        }
+
+        
+        // if the regen time is not counting up it will set the box collider gameoject to false
+        public void Regenerate()
+        {
+            anim.SetBool("Breaking", false);
+            if(_currentRegenTime < RegenTime)
+            {
+                _currentRegenTime = _currentRegenTime + Time.deltaTime;
+                
+            }
+            if(_currentRegenTime >= RegenTime)
+            {
+                BoxColl.SetActive(true);
+                _regenerating = false;
+                anim.SetBool("Regen", true);
+                Debug.Log("RegenHarpooned");
+                anim.SetBool("Regen", false);
+            }
+
+        }
+    }
+}
+
