@@ -1,0 +1,127 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Feedbacks;
+using UnityEngine.Events;
+
+
+namespace MoreMountains.Tools
+{
+
+// This class takes a bit of set up. this class is intended to be attached to the parent with at least 2 children, The parent needs a 2DTriggerCollider. 
+// 1 child will be the renderer (sprite renderer and animator). The other will be the Platform collider. You will want to assign this in the inspector. 
+
+// The intention for this class is a breaking bridge with a delay time. It looks for a target layer.  If the target exits before the triggerTime then it cancels.
+// if the target hangs out in the trigger area for longer then the trigger time, then the collider breaks. 
+//after the target leaves it starts a timer for regeneration 
+
+
+public class BreakingPlatform : MonoBehaviour
+    {
+        //Time it takes to trigger the break
+        public float TriggerTime = 2f;
+        //Time it takes to trigger the reneneration
+        public float RegenTime = 3f;
+        //What layermask is the trigger looking for
+        public LayerMask Trigger2DLayerMask;
+        //You will want to put your Platform collider in this field
+        public GameObject BoxColl;
+        //You will want to grab your animator and place it in this field
+        public Animator anim;
+        //Feedbacks
+        public MMFeedbacks BreakFeedback;
+        public MMFeedbacks RumbleFeedback;
+        public MMFeedbacks RegenFeedback; 
+
+        //Private Stuff
+        private float _currentTriggerTime = 0f;
+        private float _currentRegenTime = 0f;
+        private bool _regenerating = false;
+
+        // Start is called before the first frame update
+        void Start()
+        {
+            _currentTriggerTime = 0f;  
+        }
+
+        void Update()
+        {
+            if(_regenerating == true)
+            {        
+                Regenerate();
+      
+            }
+        }
+
+        //Setting the animator for when the player enters the trigger area.
+        protected virtual void OnTriggerEnter2D(Collider2D other)
+        {
+            if (Trigger2DLayerMask.MMContains(other.gameObject))
+            {
+                anim.SetBool("Rumbling", true);
+                anim.ResetTrigger("Regen");  
+
+            }
+        }
+
+
+        //If the target layer is staying in the trigger zone for the length of the trigger time, then the bridge breaks. 
+        protected virtual void OnTriggerStay2D(Collider2D other)
+        {
+            if (Trigger2DLayerMask.MMContains(other.gameObject))
+            {
+                if (_currentTriggerTime < TriggerTime)
+                {
+                    _currentTriggerTime = _currentTriggerTime + Time.deltaTime;
+                }                
+                else
+                {
+                    BridgeBreak();
+                    anim.SetBool("Breaking", true);
+                    RumbleFeedback?.PlayFeedbacks();                        
+                }  
+            }
+        }
+
+        // Looks for the player leaving. sets the animator to not to rumble. 
+        protected virtual void OnTriggerExit2D(Collider2D other)
+        {
+            if (Trigger2DLayerMask.MMContains(other.gameObject))
+            {
+                _regenerating = true;
+                _currentTriggerTime = 0f; 
+                anim.SetBool("Rumbling", false);
+                               
+            }
+        }
+        
+        //This breaks the bridge
+        public void BridgeBreak()
+        {
+            //PlatformBox.enabled = false;
+            _currentRegenTime = 0f;
+            BoxColl.SetActive(false);
+            BreakFeedback?.PlayFeedbacks();  
+        }
+
+        
+        // if the regen time finishes counting up it will set the box collider gameoject to true
+        public void Regenerate()
+        {
+            anim.SetBool("Breaking", false);
+            if(_currentRegenTime < RegenTime)
+            {
+                _currentRegenTime = _currentRegenTime + Time.deltaTime;
+                
+            }
+            if(_currentRegenTime >= RegenTime)
+            {
+                BoxColl.SetActive(true);
+                _regenerating = false;
+                anim.SetTrigger("Regen");
+                RegenFeedback?.PlayFeedbacks();
+            }
+
+        }
+    }
+}
