@@ -1,0 +1,58 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Tools;
+
+namespace MoreMountains.CorgiEngine
+{
+
+	[AddComponentMenu("Corgi Engine/Character/AI/Actions/AI Action JetPack")]
+
+
+	//This action uses the jetpack for aiBrains
+	//It can be paired with a move action to move towards or way from a object while using the jetpack. 
+
+	public class AiActionJetpack : AIAction
+	{
+		//check if you want to reset ability upon exit of the ability. For instance, if you wanted to refuel after use
+		public bool ResetAfterUse;
+
+		protected CharacterJetpack _characterJetpack;
+
+		// We grab the jetpack ability from the player
+		public override void Initialization()
+		{
+			_characterJetpack = this.gameObject.GetComponentInParent<Character>()?.FindAbility<CharacterJetpack>();
+		}
+
+
+		//On Action we use the Jetpack
+		public override void PerformAction()
+		{
+			Jetpack();
+		}
+		//If Refuel after use is checked, we reset on exit of the ability  
+		public override void OnExitState()
+        {
+			if (ResetAfterUse)
+			{
+				ResetOnExit();
+			}
+		}
+
+		//Calls the characters jetpack ability
+		protected virtual void Jetpack()
+		{
+			_characterJetpack.JetpackStart();
+		}
+
+		//Resets the ability on exit
+		protected virtual void ResetOnExit()
+		{
+			
+				_characterJetpack.ResetAbility();
+			
+		}
+
+	}
+}
