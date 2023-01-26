@@ -15,6 +15,7 @@ namespace MoreMountains.CorgiEngine
 
 //Note: You do have to manually set the collider in the inspector.
 //Note: My dog is cuter then your dog
+//Note: If you are using a DamageOnTouch, then the DamageOnTouch needs to be on a child of the player.
 
 
 //Please let me know if you see any oddities or improvements
