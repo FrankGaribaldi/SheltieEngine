@@ -1,0 +1,59 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Tools;
+
+namespace MoreMountains.CorgiEngine
+{
+	public class AiActionDisableCollider2D : AIAction
+	{
+
+		using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Tools;
+
+namespace MoreMountains.CorgiEngine
+
+//This class works with the CorgiEngine. specifically with aibrains. This action turns on a boxCollider2D while in the state.
+//Note: You do have to manually set the collider to turn on and off. 
+//Note: My dog is cute
+//Please let me know if you see any oddities or improvements
+
+{
+	public class AiActionDisableCollider2D : AIAction
+	{
+
+		public BoxCollider2D MyCollider;
+
+
+			public override void Initialization()
+			{
+				MyCollider.enabled = false;
+			}
+
+			//On Action we use the set the boxcollider2d to active
+			public override void PerformAction()
+			{
+				SetActive();
+			}
+			//On Exit we turn off the boxcollider2d 
+			public override void OnExitState()
+			{
+				Deactivate();
+			}
+
+
+			//We turn on the collider
+			protected virtual void SetActive()
+			{
+				MyCollider.enabled = true;
+			}
+
+			//We turn off the collider
+			protected virtual void Deactivate()
+			{
+				MyCollider.enabled = false;
+			}
+	}
+}
