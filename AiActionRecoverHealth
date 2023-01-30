@@ -1,0 +1,46 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Tools;
+
+namespace MoreMountains.CorgiEngine
+{
+
+	[AddComponentMenu("Corgi Engine/Character/AI/Actions/AI Action Recover Health ")]
+
+
+	
+
+	public class AiActionRecoverHealth : AIAction
+	{
+
+		protected Health _health;
+
+		public float HealthToGive;
+
+
+		public override void Initialization()
+		{
+			_health = _brain.gameObject.GetComponentInParent<Health>();
+		}
+
+		public override void OnEnterState()
+		{
+			RecoverHealth();
+		}
+
+		
+		public override void PerformAction()
+		{
+			
+		}
+
+
+		protected virtual void RecoverHealth()
+		{
+			_health.GetHealth(HealthToGive, gameObject);
+		}
+
+
+	}
+}
