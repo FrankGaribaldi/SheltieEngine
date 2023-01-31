@@ -8,22 +8,29 @@ namespace MoreMountains.CorgiEngine
 
 	[AddComponentMenu("Corgi Engine/Character/AI/Actions/AI Action Recover Health ")]
 
+	// This action recovers Health on enter abrain state for the corgi engine
 
-	
 
 	public class AiActionRecoverHealth : AIAction
 	{
 
-		protected Health _health;
 
+		//Amount of health you want the ai to recover upon entering state. 
 		public float HealthToGive;
 
 
+		//PrivateStuff
+		protected Health _health;
+
+
+		//On initialization we get the health of the character
 		public override void Initialization()
 		{
 			_health = _brain.gameObject.GetComponentInParent<Health>();
 		}
 
+
+		//When we enter the state, we recover our health
 		public override void OnEnterState()
 		{
 			RecoverHealth();
@@ -36,6 +43,7 @@ namespace MoreMountains.CorgiEngine
 		}
 
 
+		//Method to add health to the character
 		protected virtual void RecoverHealth()
 		{
 			_health.GetHealth(HealthToGive, gameObject);
