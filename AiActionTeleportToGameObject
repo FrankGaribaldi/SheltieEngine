@@ -1,0 +1,43 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Tools;
+
+namespace MoreMountains.CorgiEngine
+{
+
+	[AddComponentMenu("Corgi Engine/Character/AI/Actions/AI Action Teleport To GameObject")]
+
+	//This action teleports the character to a selected gameobjects position
+
+	public class AiActionTeleportToGameObject : AIAction
+	{
+
+
+		private Vector3 m_MyPosition;
+		public Transform m_NewTransform;
+
+
+		//On Init, we grab the vector3 of the gameobject to teleport to
+		public override void Initialization()
+		{
+			m_MyPosition.Set(m_NewTransform.position.x, m_NewTransform.position.y, 0);
+		}
+
+		//We teleport the character upon entering state
+		public override void OnEnterState()
+		{
+			TeleportToPosition();
+		}
+		public override void PerformAction()
+		{
+			
+		}
+
+		//We teleport the player to the gameobjects position
+		protected virtual void TeleportToPosition()
+        {
+			transform.position = m_MyPosition;
+		}
+	}
+}
