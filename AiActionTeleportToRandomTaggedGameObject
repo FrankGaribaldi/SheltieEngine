@@ -1,0 +1,59 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Tools;
+
+namespace MoreMountains.CorgiEngine
+{
+
+
+    [AddComponentMenu("Corgi Engine/Character/AI/Actions/AI Action Teleport To Random Tagged GameObject")]
+
+
+    // This class is used in conjuction with the corgi engine/aiactions.
+    // This class grab every gameobject with a tag that is set in the inspector. It will then teleport the character to a random gameobject with that tag
+    public class AiActionTeleportToRandomTaggedGameObject : AIAction
+    {
+   
+       //The array of Gameobjects to pick from tag
+       [SerializeField] private GameObject[] TaggedGameObjects;
+
+        public string TheTag;
+
+        //Private Shtuff
+        private Vector3 m_MyPosition;
+        private Transform m_NewTransform;
+
+        //On Init we grab all the objects with the Tag specified in the inspector
+        public override void Initialization()
+        {
+            TaggedGameObjects = GameObject.FindGameObjectsWithTag(TheTag);
+        }
+        public override void PerformAction()
+        {
+
+        }
+        public override void OnEnterState()
+        {
+            PickARandomAndTeleport();
+        }
+        public override void OnExitState()
+        {
+
+        }
+        protected virtual void PickARandomAndTeleport()
+        {
+            //We pick a random range on the index of the gameobjects
+            int randomIndex = Random.Range(0, TaggedGameObjects.Length);
+
+            //we set "randomObject" to the random object that is picked
+            GameObject randomObject = TaggedGameObjects[randomIndex];
+
+            //We grab the transform of the random object
+            m_MyPosition = randomObject.transform.position;
+            //We teleport the character
+            transform.position = m_MyPosition;          
+        }
+    }
+}
+
