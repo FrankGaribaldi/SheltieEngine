@@ -1,0 +1,39 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Tools;
+
+namespace MoreMountains.CorgiEngine
+{
+
+    [AddComponentMenu("Corgi Engine/Character/AI/Actions/AI Action Dive")]
+    
+
+        public class AiActionDive : AIAction
+        {
+        protected CharacterDive _characterDive;
+
+            public override void Initialization()
+            {
+            _characterDive = this.gameObject.GetComponentInParent<Character>()?.FindAbility<CharacterDive>();
+            }
+            public override void PerformAction()
+            {
+
+
+            }
+            public override void OnEnterState()
+            {
+                ActionDive();
+            }
+            public override void OnExitState()
+            {
+
+            }
+            protected virtual void ActionDive()
+            {
+            _characterDive.InitiateDive();
+            }
+        }    
+}
+
