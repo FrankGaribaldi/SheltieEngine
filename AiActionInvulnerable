@@ -1,0 +1,51 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Tools;
+
+namespace MoreMountains.CorgiEngine
+{
+
+    [AddComponentMenu("Corgi Engine/Character/AI/Actions/AI Action Invulnerable")]
+
+    public class AiActionInvulnerable : AIAction
+    {
+		protected Health _health;
+
+		public override void Initialization()
+		{
+			_health = _brain.gameObject.GetComponentInParent<Health>();
+		}
+
+
+		public override void OnEnterState()
+		{
+			BecomeInvulnerable();
+
+
+		}
+
+		public override void OnExitState()
+		{
+			BecomeVulnerable();
+		}
+
+
+		public override void PerformAction()
+		{
+
+		}
+
+
+		protected virtual void BecomeInvulnerable()
+		{
+			_health.Invulnerable = true;
+		}
+
+		protected virtual void BecomeVulnerable()
+		{
+			_health.Invulnerable = false;
+		}
+
+	}
+}
