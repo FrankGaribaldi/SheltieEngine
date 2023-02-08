@@ -1,0 +1,27 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Tools;
+
+namespace MoreMountains.CorgiEngine
+{
+    //This is an extention to the corgi engine
+    //This class looks at if the player is dead, if so it destroys the gameobject this is attached to. 
+    public class DestroyIfPlayerIsDead : MonoBehaviour
+    {
+
+        public float DelayBeforeDestroy = 0;
+
+        // Update is called once per frame
+        void Update()
+        {
+            //If the Player is dead, then destroy after delay
+            if (LevelManager.Instance.Players[0].ConditionState.CurrentState != CharacterStates.CharacterConditions.Dead)
+            {
+                return;
+            }
+            Destroy(gameObject, DelayBeforeDestroy);
+
+        }
+    }
+}
