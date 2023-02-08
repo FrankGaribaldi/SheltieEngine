@@ -1,0 +1,54 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Tools;
+
+namespace MoreMountains.CorgiEngine
+{
+
+    [AddComponentMenu("Corgi Engine/Character/AI/Actions/AI Action Damage On Touch Off")]
+
+    // To be used with AiBrain within the CorgiEngine
+    // When we are in this class the damageOnTouch will turn off. When Exiting, it will turn back on. 
+
+    public class AiActionDamageOnTouchOff : AIAction
+    {
+
+        protected DamageOnTouch _damageOnTouch;
+
+        public override void Initialization()
+        {
+            //On Init We get our DamageOnTouch class
+            _damageOnTouch = _brain.gameObject.GetComponentInParent<DamageOnTouch>();
+
+        }
+
+        //Needed for the extention
+        public override void PerformAction()
+        {
+
+        }
+
+        //Upon entering and exiting the states, we turn on and off the DamageOnTouch respectivly
+        public override void OnEnterState()
+        {
+            TurnOffDamage();
+        }
+        public override void OnExitState()
+        {
+            TurnOnDamage();
+        }
+
+
+
+        //These following methods turn on and off the DamageOnTouch
+        protected virtual void TurnOffDamage()
+        {
+            _damageOnTouch.enabled = false;
+        }
+        protected virtual void TurnOnDamage()
+        {
+            _damageOnTouch.enabled = true;
+        }
+    }
+}
