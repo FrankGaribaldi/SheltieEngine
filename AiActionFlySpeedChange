@@ -1,0 +1,44 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Tools;
+
+namespace MoreMountains.CorgiEngine
+{
+
+    [AddComponentMenu("Corgi Engine/Character/AI/Actions/AI Action Fly Speed Change")]
+
+    public class AiActionFlySpeedChange : AIAction
+    {
+        protected CharacterFly _fly;
+        public float EnterStateFlySpeed;
+        private float _RegularFlySpeed;
+
+        public override void Initialization()
+        {
+            _fly = _brain.gameObject.GetComponentInParent<CharacterFly>();
+            _RegularFlySpeed = _fly.FlySpeed;
+        }
+        public override void PerformAction()
+        {
+
+        }
+        public override void OnEnterState()
+        {
+            FlySpeedOnEnter();
+        }
+            
+        public override void OnExitState()
+        {
+            FlySpeedOnExit();
+        }
+        protected virtual void FlySpeedOnEnter()
+        {
+            _fly.FlySpeed = EnterStateFlySpeed;
+        }
+        protected virtual void FlySpeedOnExit()
+        {
+            _fly.FlySpeed = _RegularFlySpeed;
+        }
+    }
+}
