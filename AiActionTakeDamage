@@ -12,6 +12,8 @@ namespace MoreMountains.CorgiEngine
         protected Character _character;
         public Vector3 DamageDirection;
         public float DamageToTake;
+        public float FlickerDuration;
+        public float InvicibilityDuration;
 
         public override void Initialization()
         {
@@ -29,7 +31,7 @@ namespace MoreMountains.CorgiEngine
         }
         protected virtual void TakeDamage()
         {
-            _character.CharacterHealth.Damage(DamageToTake, gameObject,1,2, DamageDirection, null);
+            _character.CharacterHealth.Damage(DamageToTake, gameObject, FlickerDuration, InvicibilityDuration, DamageDirection, null);
         }
     }
 }
