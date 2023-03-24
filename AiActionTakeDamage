@@ -23,11 +23,11 @@ namespace MoreMountains.CorgiEngine
         }
         public override void PerformAction()
         {
-            TakeDamage();
+
         }
         public override void OnEnterState()
         {
-           
+            TakeDamage();
         }
         protected virtual void TakeDamage()
         {
