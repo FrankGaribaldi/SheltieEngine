@@ -1,0 +1,35 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Tools;
+
+namespace MoreMountains.CorgiEngine
+{
+    [AddComponentMenu("Corgi Engine/Character/AI/Actions/AI Action Take Damage")]
+
+    public class AiActionTakeDamage : AIAction
+    {
+        protected Character _character;
+        public Vector3 DamageDirection;
+        public float DamageToTake;
+
+        public override void Initialization()
+        {
+    
+            _character = this.gameObject.GetComponentInParent<Character>();
+
+        }
+        public override void PerformAction()
+        {
+            TakeDamage();
+        }
+        public override void OnEnterState()
+        {
+           
+        }
+        protected virtual void TakeDamage()
+        {
+            _character.CharacterHealth.Damage(DamageToTake, gameObject,1,2, DamageDirection, null);
+        }
+    }
+}
