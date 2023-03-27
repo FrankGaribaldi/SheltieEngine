@@ -1,0 +1,57 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Tools;
+
+namespace MoreMountains.CorgiEngine
+{
+    [AddComponentMenu("Corgi Engine/Character/AI/Actions/AI Action Spawn Prefab")]
+    public class AiActionSpawnPrefab : AIAction
+    {
+        [Header("Prefabs")]
+        public GameObject[] Prefabs;
+        [Header("Spawn Parameters")]
+        public int Count = 10;
+        public Vector3 PositionRangeMin = Vector3.one * -1f;
+        public Vector3 PositionRangeMax = Vector3.one;
+        public float SpawnIntervalMin = 0.5f;
+        public float SpawnIntervalMax = 1.5f;
+
+        private Coroutine _spawnCoroutine;
+
+        public override void Initialization()
+        {
+        }
+
+        public override void PerformAction()
+        {
+        }
+
+        public override void OnEnterState()
+        {
+            _spawnCoroutine = StartCoroutine(SpawnCoroutine());
+        }
+
+        public override void OnExitState()
+        {
+            StopCoroutine(_spawnCoroutine);
+        }
+
+        private IEnumerator SpawnCoroutine()
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                GameObject prefab = Prefabs[Random.Range(0, Prefabs.Length)];
+                Vector3 position = new Vector3(
+                    Random.Range(PositionRangeMin.x, PositionRangeMax.x),
+                    Random.Range(PositionRangeMin.y, PositionRangeMax.y),
+                    Random.Range(PositionRangeMin.z, PositionRangeMax.z)
+                );
+                Instantiate(prefab, transform.position + position, Quaternion.identity);
+                float interval = Random.Range(SpawnIntervalMin, SpawnIntervalMax);
+                yield return new WaitForSeconds(interval);
+            }
+        }
+    }
+}
+
