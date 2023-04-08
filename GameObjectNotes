@@ -1,0 +1,7 @@
+using UnityEngine;
+
+public class GameObjectNotes : MonoBehaviour
+{
+    [TextArea(3, 10)]
+    public string notes = "";
+}
