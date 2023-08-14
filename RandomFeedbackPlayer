@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using MoreMountains.Feedbacks;
 
+// Add some feedbacks in the inspector, it roll the dice and play whatever feedback it landed on
+
 public class RandomFeedbackPlayer : MonoBehaviour
 
 {
