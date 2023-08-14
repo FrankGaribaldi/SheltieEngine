@@ -1,0 +1,22 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Feedbacks;
+
+public class RandomFeedbackPlayer : MonoBehaviour
+
+{
+    public MMFeedbacks[] feedbacks;
+
+    public void PlayRandomFeedback()
+    {
+        if (feedbacks.Length == 0)
+        {
+            Debug.LogWarning("No MMFeedbacks found!");
+            return;
+        }
+
+        int randomIndex = Random.Range(0, feedbacks.Length);
+        feedbacks[randomIndex]?.PlayFeedbacks();
+    }
+}
