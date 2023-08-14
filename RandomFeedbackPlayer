@@ -6,17 +6,22 @@ using MoreMountains.Feedbacks;
 public class RandomFeedbackPlayer : MonoBehaviour
 
 {
+    //Place your feedbacks in the inspector here kid
     public MMFeedbacks[] feedbacks;
 
     public void PlayRandomFeedback()
     {
+        //If we got some stuff in our array, then we do stuff, if not return
         if (feedbacks.Length == 0)
         {
             Debug.LogWarning("No MMFeedbacks found!");
             return;
         }
 
+        // Roll that dice, pick that number
         int randomIndex = Random.Range(0, feedbacks.Length);
+
+        //456 - you win the game, now play that feedback
         feedbacks[randomIndex]?.PlayFeedbacks();
     }
 }
