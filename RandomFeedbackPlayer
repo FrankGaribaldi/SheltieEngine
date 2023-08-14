@@ -11,7 +11,7 @@ public class RandomFeedbackPlayer : MonoBehaviour
 
     public void PlayRandomFeedback()
     {
-        //If we got some stuff in our array, then we do stuff, if not return
+        //If we dont got stuff in our array, then return. If so proceed kid, you almost there!
         if (feedbacks.Length == 0)
         {
             Debug.LogWarning("No MMFeedbacks found!");
