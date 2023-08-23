@@ -1,0 +1,97 @@
+using UnityEngine;
+using MoreMountains.Feedbacks;
+
+
+public class MoveChild : MonoBehaviour
+{
+    public Transform childTransform;
+    public float speed = 1.0f;
+    public Vector3 destinationOffset;
+    public LayerMask triggerLayerMask;
+    public float resetDelay = 1.0f; // Public delay before the childTransform resets itself
+    public Animator animator; // Public Animator to update animation parameters
+    public string idleParam = "Idle"; // Name of the idle parameter in the animator
+    public string moveParam = "Move"; // Name of the move parameter in the animator
+    public string delayParam = "Delay"; // Name of the delay parameter in the animator
+
+    private Vector3 initialSpawn;
+    private Vector3 endPos;
+    private float journeyLength;
+    private float startTime;
+    private bool movingTowardsDestination;
+    private bool waitingToReset;
+    private float resetStartTime;
+
+
+    public MMFeedbacks StartPersueFeedback;
+    
+
+    void Start()
+    {
+        initialSpawn = childTransform.position;
+        endPos = initialSpawn + destinationOffset;
+        journeyLength = Vector3.Distance(initialSpawn, endPos);
+
+        // Set the idle parameter to true
+        animator.SetBool(idleParam, true);
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (movingTowardsDestination)
+        {
+            // Ignore trigger event if already moving towards the destination
+            return;
+        }
+
+        if (triggerLayerMask == (triggerLayerMask | (1 << other.gameObject.layer)))
+        {
+            startTime = Time.time;
+            movingTowardsDestination = true;
+
+            // Set the move parameter to true
+            animator.SetBool(moveParam, true);
+            // Set the idle parameter to false
+            animator.SetBool(idleParam, false);
+            StartPersueFeedback?.PlayFeedbacks();
+        }
+    }
+
+    void Update()
+    {
+        if (movingTowardsDestination)
+        {
+            float distCovered = (Time.time - startTime) * speed;
+            float fracJourney = distCovered / journeyLength;
+            childTransform.position = Vector3.Lerp(initialSpawn, endPos, fracJourney);
+
+            if (fracJourney >= 1.0f)
+            {
+                movingTowardsDestination = false;
+                waitingToReset = true;
+                resetStartTime = Time.time;
+                // Set the move parameter to false
+                animator.SetBool(moveParam, false);
+                // Set the delay parameter to true
+                animator.SetBool(delayParam, true);
+            }
+        }
+        else if (waitingToReset)
+        {
+            float timeSinceResetStart = Time.time - resetStartTime;
+            if (timeSinceResetStart >= resetDelay)
+            {
+                waitingToReset = false;
+                // Set the delay parameter to false
+                animator.SetBool(delayParam, false);
+                // Set the idle parameter to true
+                animator.SetBool(idleParam, true);
+                childTransform.position = initialSpawn; // Reset the position to the initial spawn
+            }
+        }
+        else
+        {
+            childTransform.position = initialSpawn;
+        }
+    }
+}
