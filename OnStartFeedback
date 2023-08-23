@@ -1,0 +1,16 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Feedbacks;
+
+public class OnStartFeedback : MonoBehaviour
+{
+    public MMFeedbacks StartFeedback;
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        StartFeedback?.PlayFeedbacks();
+    }
+}
