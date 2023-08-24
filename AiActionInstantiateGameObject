@@ -1,0 +1,50 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Tools;
+
+namespace MoreMountains.CorgiEngine
+{
+
+    [AddComponentMenu("Corgi Engine/Character/AI/Actions/AI Action Instantiate GameObject")]
+        
+
+    public class AiActionInstantiateGameObject : AIAction
+    {
+
+        public Vector3 SpawnOffset;
+        public GameObject PrefabToSpawn;
+        public float DelayTime = 0;
+
+        public float MinX = 0;
+        public float MaxX = 0;
+        public float MinY = 0;
+        public float MaxY = 0;
+
+        public override void Initialization()
+        {
+
+        }
+        public override void PerformAction()
+        {
+
+        }
+        public override void OnEnterState()
+        {
+            SpawnTheGameObject();
+     
+        }
+        public override void OnExitState()
+        {
+
+        }
+        protected virtual void SpawnTheGameObject()
+        {
+            float TempX = Random.Range(MinX, MaxX);
+            float TempY = Random.Range(MinY, MaxY);
+            Vector3 SpawnOffset = new Vector3(TempX, TempY, 0);
+
+            Instantiate(PrefabToSpawn, transform.position + SpawnOffset, Quaternion.identity);
+        }
+    }
+}
