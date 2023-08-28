@@ -1,0 +1,61 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PhaseManager : MonoBehaviour
+{
+    [System.Serializable]
+    public class PhaseData
+    {
+        public int phaseNumber; // New field to store the phase number
+        public string title;
+        [TextArea(3, 10)] // Adjust the values as needed
+        public string description;
+        public GameObject[] OnItems;
+        public GameObject[] OffItems;
+    }
+
+    [Header("Phases")]
+    public PhaseData[] phases;
+
+    private void Start()
+    {
+        StartPhaseByNumber(0); // Start the first phase by default
+    }
+
+    public void StartPhaseByNumber(int phaseNumber)
+    {
+        PhaseData phase = FindPhaseByNumber(phaseNumber);
+
+        if (phase != null)
+        {
+            Debug.Log("Starting Phase " + phase.phaseNumber + " - " + phase.title + ": " + phase.description);
+
+            foreach (GameObject obj in phase.OnItems)
+            {
+                obj.SetActive(true);
+            }
+            foreach (GameObject obj in phase.OffItems)
+            {
+                obj.SetActive(false);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Phase with number " + phaseNumber + " not found.");
+        }
+    }
+
+    private PhaseData FindPhaseByNumber(int phaseNumber)
+    {
+        foreach (PhaseData phase in phases)
+        {
+            if (phase.phaseNumber == phaseNumber)
+            {
+                return phase;
+            }
+        }
+        return null;
+    }
+}
+
