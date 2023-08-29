@@ -1,8 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MoreMountains.Feedbacks;
 
 public class PhaseManager : MonoBehaviour
+
+    //this class is dope
+
+    //Want to make a level have phases?
+    //those phases turn things on and off?
+    //you want to be able to call them through events?
+    //Maybe you want debugs telling when you change phase?
+    //maybe you want those phases tied to numbers?!!??!
+    //and better yet?!?!?
+    //maybe you even want to debug them through events?!
+    //Well...
+    //Holy fuck!
+    //you found a really really really oddly specific class that might help you out!
+
 {
     [System.Serializable]
     public class PhaseData
@@ -20,7 +35,8 @@ public class PhaseManager : MonoBehaviour
 
     private void Start()
     {
-        StartPhaseByNumber(0); // Start the first phase by default
+        //on start we start phase 0
+        StartPhaseByNumber(0); // Starts the first phase on start
     }
 
     public void StartPhaseByNumber(int phaseNumber)
@@ -29,12 +45,16 @@ public class PhaseManager : MonoBehaviour
 
         if (phase != null)
         {
+            //Tell the console what the hell is going on in this phase
             Debug.Log("Starting Phase " + phase.phaseNumber + " - " + phase.title + ": " + phase.description);
 
+
+            //Set the phase items that are to be active when entering phase
             foreach (GameObject obj in phase.OnItems)
             {
                 obj.SetActive(true);
             }
+            //Set the phase items that are to be Deactive when entering phase
             foreach (GameObject obj in phase.OffItems)
             {
                 obj.SetActive(false);
@@ -42,19 +62,25 @@ public class PhaseManager : MonoBehaviour
         }
         else
         {
+            //We didnt find anything, you fucked up, Look at your inspector. 
             Debug.LogWarning("Phase with number " + phaseNumber + " not found.");
         }
     }
 
+    //good for establishing the phase through events
+    //Play a specific phase by a number
     private PhaseData FindPhaseByNumber(int phaseNumber)
     {
+        //uhhh duuhhhh the phase # has to be in here somewhere...... (looks through all the phases)
         foreach (PhaseData phase in phases)
         {
+            //We found it!
             if (phase.phaseNumber == phaseNumber)
             {
                 return phase;
             }
         }
+        //Your looker is broken, call mom.
         return null;
     }
 }
