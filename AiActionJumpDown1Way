@@ -1,0 +1,39 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Tools;
+
+namespace MoreMountains.CorgiEngine
+{
+
+    [AddComponentMenu("Corgi Engine/Character/AI/Actions/AI Action Jump Down 1 Way")]
+
+    public class AiActionJumpDown1Way : AIAction
+    {
+
+        protected CharacterJump _characterJump;
+
+        public override void Initialization()
+        {
+            _characterJump = this.gameObject.GetComponentInParent<Character>()?.FindAbility<CharacterJump>();
+
+        }
+        public override void PerformAction()
+        {
+
+        }
+        public override void OnEnterState()
+        {
+            JumpDown();
+        }
+        public override void OnExitState()
+        {
+
+        }
+        protected virtual void JumpDown()
+        {
+            _characterJump.JumpDownFromOneWayPlatform();
+      
+        }
+    }
+}
