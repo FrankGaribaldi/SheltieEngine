@@ -1,0 +1,66 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Tools;
+
+namespace MoreMountains.CorgiEngine
+{
+    public class NoDashZone : MonoBehaviour
+    {
+
+		public LayerMask TargetLayerMask;
+		protected Character _character;
+        protected CharacterDash _characterDash;
+
+
+		//This actually turns the ability off
+		protected virtual void TurnDashOff(GameObject collider)
+		{
+			//We got something in the target layer(s)? if not, oh well. If so...
+			if (!MMLayers.LayerInLayerMask(collider.layer, TargetLayerMask))
+			{
+				return;
+			}
+			_character = collider.GetComponent<Character>();
+			//Do you got a dash ability?
+			if (_character != null) { _characterDash = _character.FindAbility<CharacterDash>(); }
+			if (_characterDash == null)
+			{
+				return;
+			}
+			// No dashes ALLOWED! 
+			_characterDash.AbilityPermitted = false;
+		}
+
+		//This actually turns the ability on
+		protected virtual void TurnDashOn(GameObject collider)
+		{
+			//We got something in the target layer(s)? if not, oh well. If so...
+			if (!MMLayers.LayerInLayerMask(collider.layer, TargetLayerMask))
+			{
+				return;
+			}
+			_character = collider.GetComponent<Character>();
+
+			//Do you got a dash ability? 
+			if (_character != null) { _characterDash = _character.FindAbility<CharacterDash>(); }
+			if (_characterDash == null)
+			{
+				return;
+			}
+			//Turn that shit on
+			_characterDash.AbilityPermitted = true;
+		}
+
+		//Enter & Exit Triggers that call the things that do the thing
+		public virtual void OnTriggerEnter2D(Collider2D collider)
+		{
+			TurnDashOff(collider.gameObject);
+		}
+
+		public virtual void OnTriggerExit2D(Collider2D collider)
+		{
+			TurnDashOn(collider.gameObject);
+		}
+	}
+}
