@@ -1,0 +1,36 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Tools;
+
+namespace MoreMountains.CorgiEngine
+{
+    [AddComponentMenu("Corgi Engine/Character/AI/Decisions/AI Decision Min Max Time since Start")]
+    public class AIDecisionMinMaxTimeSinceStart : AIDecision
+    {
+        [Tooltip("The minimum duration (in seconds) after which to return true")]
+        public float MinTime;
+
+        [Tooltip("The maximum duration (in seconds) after which to return true")]
+        public float MaxTime;
+        protected float _startTime;
+
+
+        public override void Initialization()
+        {
+            _startTime = Time.time;
+        }
+
+        public override bool Decide()
+        {
+            return EvaluateTime();
+        }
+
+        protected virtual bool EvaluateTime()
+        {
+            float elapsedTime = Time.time - _startTime;
+            return (elapsedTime >= MinTime && elapsedTime <= MaxTime);
+        }
+    }
+
+}
