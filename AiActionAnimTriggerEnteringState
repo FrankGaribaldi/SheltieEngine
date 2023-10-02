@@ -1,0 +1,37 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Tools;
+
+namespace MoreMountains.CorgiEngine
+{
+    [AddComponentMenu("Corgi Engine/Character/AI/Actions/AI Action Anim Trigger Entering State")]
+
+    public class AiActionAnimTriggerEnteringState : AIAction
+    {
+
+        public Animator MyAnimator;
+        public string AnimationParameterName;
+
+        public override void Initialization()
+        {
+
+        }
+        public override void PerformAction()
+        {
+
+        }
+        public override void OnEnterState()
+        {
+            TriggerAnimation();
+        }
+        public override void OnExitState()
+        {
+            
+        }
+        protected virtual void TriggerAnimation()
+        {
+            MyAnimator.SetTrigger(AnimationParameterName);
+        }
+    }
+}
