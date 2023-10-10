@@ -1,0 +1,59 @@
+using UnityEngine;
+using MoreMountains.CorgiEngine;
+
+public class ChangeSortingLayerOnTrigger : MonoBehaviour
+{
+    [SerializeField] private LayerMask layerMask;           // Layer mask to check for collisions
+    [SerializeField] private string newSortingLayerName;    // New sorting layer name
+    [SerializeField] private int newSortingOrder;           // New sorting order
+
+    private SpriteRenderer playerSpriteRenderer;            // Reference to the player's SpriteRenderer
+    private string originalSortingLayerName;               // Original sorting layer name
+    private int originalSortingOrder;                       // Original sorting order
+
+    private void Start()
+    {
+        // Get the player's SpriteRenderer
+        Invoke("GetPlayerSpriteRenderer", 2f);
+    }
+
+    void GetPlayerSpriteRenderer()
+    {
+        playerSpriteRenderer = LevelManager.Instance.Players[0].CharacterModel.GetComponent<SpriteRenderer>();
+
+        // Store the original sorting layer and order
+        if (playerSpriteRenderer != null)
+        {
+            originalSortingLayerName = playerSpriteRenderer.sortingLayerName;
+            originalSortingOrder = playerSpriteRenderer.sortingOrder;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        // Check if the colliding object matches the layerMask
+        if (((1 << other.gameObject.layer) & layerMask) != 0)
+        {
+            // Change the sorting layer and order
+            if (playerSpriteRenderer != null)
+            {
+                playerSpriteRenderer.sortingLayerName = newSortingLayerName;
+                playerSpriteRenderer.sortingOrder = newSortingOrder;
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        // Check if the colliding object matches the layerMask
+        if (((1 << other.gameObject.layer) & layerMask) != 0)
+        {
+            // Restore the original sorting layer and order
+            if (playerSpriteRenderer != null)
+            {
+                playerSpriteRenderer.sortingLayerName = originalSortingLayerName;
+                playerSpriteRenderer.sortingOrder = originalSortingOrder;
+            }
+        }
+    }
+}
