@@ -1,0 +1,68 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+
+using MoreMountains.Tools;
+
+namespace MoreMountains.CorgiEngine
+{
+    public class NoRunZone : MonoBehaviour
+    {
+        public LayerMask TargetLayerMask;
+        protected Character _character;
+        protected CharacterRun _characterRun;
+
+		//This actually turns the ability off
+		protected virtual void TurnRunOff(GameObject collider)
+		{
+			//We got something in the target layer(s)? if not, oh well. If so...
+			if (!MMLayers.LayerInLayerMask(collider.layer, TargetLayerMask))
+			{
+				return;
+			}
+			_character = collider.GetComponent<Character>();
+			//Do you got a Run ability?
+			if (_character != null) { _characterRun = _character.FindAbility<CharacterRun>(); }
+			if (_characterRun == null)
+			{
+				return;
+			}
+			// No Running ALLOWED! 
+			_characterRun.AbilityPermitted = false;
+		}
+
+
+		//This actually turns the ability on
+		protected virtual void TurnRunOn(GameObject collider)
+		{
+			//We got something in the target layer(s)? if not, oh well. If so...
+			if (!MMLayers.LayerInLayerMask(collider.layer, TargetLayerMask))
+			{
+				return;
+			}
+			_character = collider.GetComponent<Character>();
+
+			//Do you got a run ability? 
+			if (_character != null) { _characterRun = _character.FindAbility<CharacterRun>(); }
+			if (_characterRun == null)
+			{
+				return;
+			}
+			//Turn that shit on
+			_characterRun.AbilityPermitted = true;
+		}
+
+
+		//Enter & Exit Triggers that call the things that do the thing
+		public virtual void OnTriggerEnter2D(Collider2D collider)
+        {
+            TurnRunOff(collider.gameObject);
+        }
+
+        public virtual void OnTriggerExit2D(Collider2D collider)
+        {
+            TurnRunOn(collider.gameObject);
+        }
+    }
+}
