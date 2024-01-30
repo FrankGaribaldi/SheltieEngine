@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MoreMountains.Feedbacks;
+using UnityEngine.Events;
 
-public class PhaseManager : MonoBehaviour
+public class ARDENPhaseManager : MonoBehaviour
 
     //this class is dope
 
@@ -28,6 +29,8 @@ public class PhaseManager : MonoBehaviour
         public string description;
         public GameObject[] OnItems;
         public GameObject[] OffItems;
+        // Unity Event to be triggered when this phase starts
+        public UnityEvent onPhaseStart;
     }
 
     [Header("Phases")]
@@ -45,27 +48,27 @@ public class PhaseManager : MonoBehaviour
 
         if (phase != null)
         {
-            //Tell the console what the hell is going on in this phase
             Debug.Log("Starting Phase " + phase.phaseNumber + " - " + phase.title + ": " + phase.description);
 
-
-            //Set the phase items that are to be active when entering phase
             foreach (GameObject obj in phase.OnItems)
             {
                 obj.SetActive(true);
             }
-            //Set the phase items that are to be Deactive when entering phase
+
             foreach (GameObject obj in phase.OffItems)
             {
                 obj.SetActive(false);
             }
+
+            // Invoke the Unity Event for this phase
+            phase.onPhaseStart.Invoke();
         }
         else
         {
-            //We didnt find anything, you fucked up, Look at your inspector. 
             Debug.LogWarning("Phase with number " + phaseNumber + " not found.");
         }
     }
+
 
     //good for establishing the phase through events
     //Play a specific phase by a number
