@@ -1,0 +1,81 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Tools;
+namespace MoreMountains.TopDownEngine
+{
+    [AddComponentMenu("TopDown Engine/Character/AI/Actions/AIActionSetClosestLayerMaskInTriggerAreaAsTarget")]
+    public class AIActionSetClosestLayerMaskInTriggerAreaAsTarget : AIAction
+    {
+        public bool OnlyRunOnce = true;
+        protected bool _alreadyRan = false;
+		public LayerMask targetLayerMask;
+        public BoxCollider2D triggerCollider;
+        public string TriggerZoneName = "___HomeBase";
+        public override void Initialization()
+        {
+            base.Initialization();
+            // Find the GameObject with the specified name in the scene
+            GameObject targetObject = GameObject.Find(TriggerZoneName);
+
+            // Check if the GameObject was found
+            if (targetObject != null)
+            {
+                // Attempt to get the BoxCollider2D component from the found GameObject
+                triggerCollider = targetObject.GetComponent<BoxCollider2D>();
+
+                if (triggerCollider == null)
+                {
+                    Debug.LogError("BoxCollider2D not found on the specified GameObject.");
+                }
+            }
+            else
+            {
+                //Debug.LogError("GameObject with the specified name not found in the scene.");
+            }
+        }
+        public override void PerformAction()
+		{
+			if (OnlyRunOnce && _alreadyRan)
+			{
+				return;
+			}
+
+            FindClosestObjectInCollider();              
+		}
+
+		public override void OnEnterState()
+		{
+			base.OnEnterState();
+			_alreadyRan = false;
+		}
+
+        protected virtual void FindClosestObjectInCollider()
+        {  
+            Collider2D[] colliders = Physics2D.OverlapBoxAll(triggerCollider.transform.position, triggerCollider.size, 0, targetLayerMask);
+
+            if (colliders.Length > 0)
+            {
+                float closestDistance = float.MaxValue;
+                Transform closestTransform = null;
+
+                foreach (Collider2D collider in colliders)
+                {
+                    float distance = Vector2.Distance(triggerCollider.transform.position, collider.transform.position);
+
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestTransform = collider.transform;
+                    }
+                }
+
+                _brain.Target = closestTransform;
+            }
+            else
+            {
+                return;
+            }
+        }
+    }
+}
