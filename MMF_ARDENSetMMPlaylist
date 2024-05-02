@@ -1,0 +1,100 @@
+using UnityEngine;
+using MoreMountains.Tools;
+using System;
+
+namespace MoreMountains.Feedbacks
+
+{
+    [AddComponentMenu("PlaylistSetterFeedback")]
+    [FeedbackHelp("Sets A Playlist track")]
+    [FeedbackPath("ARDEN/MMF_ARDENSetMMPlaylist")]
+    public class MMF_ARDENSetMMPlaylist : MMF_Feedback
+    {
+        
+        private MMPlaylist mmPlaylist;
+        
+
+
+        public static bool FeedbackTypeAuthorized = true;
+        public override float FeedbackDuration { get { return 0f; } }
+#if UNITY_EDITOR
+        public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.DebugColor; } }
+#endif
+        [MMFInspectorGroup("TrackNumber", true)]
+        public int TrackNumber = 0;
+        public bool InstantPlay = true;
+
+
+
+
+        protected override void CustomInitialization(MMF_Player owner)
+        {
+            base.CustomInitialization(owner);
+            // your init code goes here
+            GrabPlaylist();
+
+
+
+        }
+
+        protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
+        {
+            if (!Active || !FeedbackTypeAuthorized)
+            {
+                return;
+            }
+            if (InstantPlay)
+            {
+                PlayAtIndex();
+            }
+            else
+            {
+                QueueSongTargetSong();
+                SetLoopFalse();
+            }
+        }
+
+        protected override void CustomStopFeedback(Vector3 position, float feedbacksIntensity = 1)
+        {
+            if (!FeedbackTypeAuthorized)
+            {
+                return;
+            }
+
+        }
+
+        protected virtual void QueueSongTargetSong()
+        {
+            mmPlaylist.QueueSongAtIndex(TrackNumber);
+        }
+        protected virtual void SetLoopFalse()
+        {
+            mmPlaylist.SetLoop(false);
+        }
+        protected virtual void PlayAtIndex()
+        {
+            mmPlaylist.PlayAtIndex(TrackNumber);
+        }
+        private void GrabPlaylist()
+        {
+            // Find the GameObject with MMPlaylist component attached to it
+            GameObject playlistObject = GameObject.FindWithTag("Playlist");
+
+            if (playlistObject != null)
+            {
+                // Get the MMPlaylist component attached to the found GameObject
+                mmPlaylist = playlistObject.GetComponent<MMPlaylist>();
+
+                if (mmPlaylist == null)
+                {
+                    Debug.LogError("MMPlaylist component not found on the GameObject.");
+                }
+            }
+            else
+            {
+                Debug.LogError("GameObject with the specified tag not found.");
+            }
+        }
+    }
+    
+}
