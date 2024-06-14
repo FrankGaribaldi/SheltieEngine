@@ -1,0 +1,65 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using MoreMountains.Tools;
+
+namespace ARDEN.SheltieEngine
+{
+
+    [AddComponentMenu("Corgi Engine/Character/AI/Actions/ARDEN AI Action Set MMPlaylist")]
+
+    public class ARDENAiActionSetMMPlaylist : AIAction
+    {
+        public int songNumber;
+        public MMPlaylist playlist;
+        public bool InstantPlay = true;
+        
+
+        public override void Initialization()
+        {
+            playlist = FindObjectOfType<MMPlaylist>();
+            if (playlist == null)
+            {
+                Debug.LogError("MMPlaylist component not found in the scene.");
+            }
+
+        }
+        public override void PerformAction()
+        {
+            if (InstantPlay)
+            {
+                PlayAtIndex();
+            }
+            else
+            {
+                QueueSongTargetSong();
+                SetLoopFalse();
+            }
+          
+        }
+        public override void OnEnterState()
+        {
+
+        }
+        public override void OnExitState()
+        {
+
+        }
+        protected virtual void QueueSongTargetSong()
+        {
+            playlist.QueueSongAtIndex(songNumber);
+        }
+        protected virtual void SetLoopFalse()
+        {
+            playlist.SetLoop(false);
+        }
+        protected virtual void PlayAtIndex()
+        {
+            playlist.PlayAtIndex(songNumber);
+           
+        }
+
+
+
+    }
+}
