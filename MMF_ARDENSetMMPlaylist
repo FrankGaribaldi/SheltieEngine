@@ -2,7 +2,7 @@ using UnityEngine;
 using MoreMountains.Tools;
 using System;
 
-namespace MoreMountains.Feedbacks
+namespace ARDEN
 
 {
     [AddComponentMenu("PlaylistSetterFeedback")]
@@ -98,3 +98,4 @@ namespace MoreMountains.Feedbacks
     }
     
 }
+
