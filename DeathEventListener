@@ -1,0 +1,63 @@
+using MoreMountains.Tools;
+using MoreMountains.CorgiEngine;
+using UnityEngine;
+using UnityEngine.Events;
+
+namespace ARDEN.SheltieEngine
+{
+    public class DeathEventListener : MonoBehaviour, MMEventListener<HealthDeathEvent>
+    {
+        // UnityEvent to be invoked when Player 0's health is affected
+        public UnityEvent onPlayer0Death;
+
+        // UnityEvent to be invoked when Boss health is affected
+        public UnityEvent onEnemyDeath;
+        public UnityEvent onBossDeath;
+
+
+
+        public LayerMask enemyLayer;
+        // Public LayerMask for the Boss layer
+        public LayerMask bossLayer;
+
+        public void OnMMEvent(HealthDeathEvent healthDeathEvent)
+        {
+            Health affectedHealth = healthDeathEvent.AffectedHealth;
+
+            // Access the first player from the LevelManager
+            Character player = LevelManager.Instance.Players[0];
+
+            // Check if the affectedHealth belongs to Player 0
+            if (affectedHealth == player.CharacterHealth)
+            {
+                // Invoke the UnityEvent for Player 0
+                onPlayer0Death.Invoke();
+
+
+            }
+
+            // Check if the affectedHealth belongs to a GameObject on the Enemy layer
+            GameObject affectedGameObject = affectedHealth.gameObject;
+
+            if (((1 << affectedGameObject.layer) & enemyLayer) != 0)
+            {
+
+                onEnemyDeath.Invoke();
+
+            }
+            // Check if the affectedHealth belongs to a GameObject on the Boss layer
+
+            if (((1 << affectedGameObject.layer) & bossLayer) != 0)
+            {
+
+
+                onBossDeath.Invoke();
+
+            }
+        }
+
+        void OnEnable() { this.MMEventStartListening<HealthDeathEvent>(); }
+        void OnDisable() { this.MMEventStopListening<HealthDeathEvent>(); }
+    }
+
+}
